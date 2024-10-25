@@ -95,3 +95,10 @@ public class Main {
         }
 }
 ```
+
+## Comandos para compilar y ejecutar
+
+```bash
+mvn clean install
+mvn exec:java -Dexec.mainClass="com.monocarrent.App"
+```
