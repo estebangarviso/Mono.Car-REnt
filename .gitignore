@@ -40,21 +40,29 @@ local.properties
 .settings/
 .loadpath
 
-# IntelliJ IDEA
-.idea/
-*.iws
-*.iml
-*.ipr
-out/
-
-# NetBeans
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
-
 # VS Code
 .vscode/
+
+# Maven / Java
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.log
+*.tmp
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# IntelliJ
 .idea/
+*.iml
+*.iws
+out/
+
+# OS-specific
+.DS_Store
+Thumbs.db
