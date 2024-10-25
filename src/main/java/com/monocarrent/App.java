@@ -6,7 +6,7 @@ public class App
 {
     public static void main( String[] args )
     {
-        var arriendo = new Arriendo();
+        Arriendo arriendo = new Arriendo();
         arriendo.arrendar();
     }
 }
