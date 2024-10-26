@@ -17,8 +17,8 @@ public class Vehicle {
         this.condition = condition;
     }
 
-    public void changeCondition(ConditionStatus nuevaCondicion) {
-        this.condition = nuevaCondicion;
+    public void changeCondition(ConditionStatus newConditionStatus) {
+        this.condition = newConditionStatus;
     }
 
     public void validateLicensePlate() {
