@@ -1,7 +1,7 @@
 package com.monocarrent;
 
 import com.monocarrent.arriendo.Arriendo;
-import com.monocarrent.vehiculo.Vehiculo;
+import com.monocarrent.vehiculo.Vehicle;
 
 public class App
 {
