@@ -1,13 +1,23 @@
 package com.monocarrent.common.enums;
 
 public enum ConditionStatus {
-    DISPONIBLE('D'),
-    ARRENDADO,
-    EN_MANTENCION;
+    DISPONIBLE('D', "Disponible"),
+    ARRENDADO('A', "Arrendado"),
+    EN_MANTENCION('M', "En Mantención");
 
-    ConditionStatus(String codeStatus){
-        this.codeStatus=codeStatus;
+    private char codeStatus;
+    private String description;
+
+    ConditionStatus(char codeStatus, String description){
+        this.codeStatus = codeStatus;
+        this.description = description;
     }
 
-    
+    char getCodeStatus(){
+        return codeStatus;
+    }
+
+    String getDescription(){
+        return description;
+    }
 }
