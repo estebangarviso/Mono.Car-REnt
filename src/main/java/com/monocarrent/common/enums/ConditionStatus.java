@@ -2,12 +2,16 @@ package com.monocarrent.common.enums;
 
 public enum ConditionStatus {
     DISPONIBLE('D'),
-    ARRENDADO,
-    EN_MANTENCION;
+    ARRENDADO('A'),
+    EN_MANTENCION('M');
 
-    ConditionStatus(String codeStatus){
-        this.codeStatus=codeStatus;
+    ConditionStatus(char codeStatus){  //contructores codition
+        this.codeStatus=codeStatus; //atributo
     }
 
-    
+    char getCodeStatus(){  // este metodo es un getter
+        return codeStatus;
+    }
+
+    private char codeStatus;// declarar el atributo privado
 }
