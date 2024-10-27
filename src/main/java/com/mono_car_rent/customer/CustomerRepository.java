@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import com.mono_car_rent.common.RepositoryInterface;
 
-public class CustomerRepository implements RepositoryInterface<CustomerModel> {
-    private static Map<Integer, CustomerModel> customers = new HashMap<>();
+public class CustomerRepository implements RepositoryInterface<Customer> {
+    private static Map<Integer, Customer> customers = new HashMap<>();
 
     @Override
-    public void save(CustomerModel entity) {
+    public void save(Customer entity) {
         customers.put(entity.getId(), entity);
     }
 
@@ -18,12 +18,12 @@ public class CustomerRepository implements RepositoryInterface<CustomerModel> {
     }
 
     @Override
-    public void update(CustomerModel entity) {
+    public void update(Customer entity) {
         customers.put(entity.getId(), entity);
     }
     
     @Override
-    public CustomerModel findById(int id) {
+    public Customer findById(int id) {
         return customers.get(id);
     }
 

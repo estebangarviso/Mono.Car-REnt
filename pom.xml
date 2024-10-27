@@ -9,6 +9,17 @@
     <version>1.0-SNAPSHOT</version>
     <url>http://maven.apache.org</url>
     <description>Car rental system in Java</description>
+    <developers>
+        <developer>
+            <name>Felipe Ortega</name>
+        </developer>
+        <developer>
+            <name>Daniel Padron</name>
+        </developer>
+        <developer>
+            <name>Esteban Garviso</name>
+        </developer>
+    </developers>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>

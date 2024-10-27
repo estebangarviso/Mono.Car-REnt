@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import com.mono_car_rent.common.RepositoryInterface;
 
-public class RentalReturnRepository implements RepositoryInterface<RentalReturnModel> {
-    private static Map<Integer, RentalReturnModel> rentalReturns = new HashMap<>();
+public class RentalReturnRepository implements RepositoryInterface<RentalReturn> {
+    private static Map<Integer, RentalReturn> rentalReturns = new HashMap<>();
 
     @Override
-    public void save(RentalReturnModel entity) {
+    public void save(RentalReturn entity) {
         rentalReturns.put(entity.getId(), entity);
     }
 
@@ -18,12 +18,12 @@ public class RentalReturnRepository implements RepositoryInterface<RentalReturnM
     }
 
     @Override
-    public void update(RentalReturnModel entity) {
+    public void update(RentalReturn entity) {
         rentalReturns.put(entity.getId(), entity);
     }
     
     @Override
-    public RentalReturnModel findById(int id) {
+    public RentalReturn findById(int id) {
         return rentalReturns.get(id);
     }
 

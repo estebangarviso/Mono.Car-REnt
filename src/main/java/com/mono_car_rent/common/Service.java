@@ -1,9 +1,12 @@
 package com.mono_car_rent.common;
 
-public class Model {
+public class Service {
+    public static final String LANG = "es";
+    public static final String COUNTRY = "CL";
+
     private int id;
 
-    public Model(int id) {
+    public Service(int id) {
         this.id = id;
     }
 

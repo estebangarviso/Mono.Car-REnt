@@ -18,21 +18,21 @@ public class BadRequestException extends AppException {
         return new BadRequestException(AppExceptionCode.INVALID_LICENSE_PLATE, new Throwable("Invalid license plate, must be 8 characters and uppercase"));
     }
 
-    public static BadRequestException brandMustBeUpperCase() {
+    public static BadRequestException invalidBrand() {
         return new BadRequestException(AppExceptionCode.INVALID_BRAND, new Throwable("Brand must be upper case"));
     }
 
-    public static BadRequestException modelMustBeUpperCase() {
+    public static BadRequestException invalidModel() {
         return new BadRequestException(AppExceptionCode.INVALID_MODEL, new Throwable("Model must be upper case"));
     }
 
-    public static BadRequestException invalidManufacturerYear() {
+    public static BadRequestException invalidManufactureYear() {
         return new BadRequestException(AppExceptionCode.INVALID_MANUFACTURER_YEAR, new Throwable("Invalid manufacturer year, must be between 2000 and current year"));
     }
 
     // Customer
     public static BadRequestException invalidIdentityCard() {
-        return new BadRequestException(AppExceptionCode.INVALID_IDENTITY_CARD, new Throwable("Invalid identity card. Must be 10 digits total, penultimate must be a middle dash and last must be a number between 0 and 9 or a letter k"));
+        return new BadRequestException(AppExceptionCode.INVALID_IDENTITY_CARD, new Throwable("Invalid identity card. Must be 10 characters long in total, penultimate must be a hyphen and last character must be a number between 0 and 9 or a letter k"));
     }
 
     public static BadRequestException customerIsNotActive() {
