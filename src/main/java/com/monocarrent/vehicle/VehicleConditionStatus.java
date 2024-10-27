@@ -1,14 +1,14 @@
-package com.monocarrent.common.enums;
+package com.monocarrent.vehicle;
 
-public enum ConditionStatus {
+public enum VehicleConditionStatus {
     DISPONIBLE('D', "Disponible"),
     ARRENDADO('A', "Arrendado"),
     EN_MANTENCION('M', "En Mantención");
 
-    private char codeStatus;
-    private String description;
+    private final char codeStatus;
+    private final String description;
 
-    ConditionStatus(char codeStatus, String description){
+    VehicleConditionStatus(char codeStatus, String description){
         this.codeStatus = codeStatus;
         this.description = description;
     }

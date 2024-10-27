@@ -52,7 +52,7 @@ Una devolución se caracteriza por:
 
 - Validaciones de atributos en los mutadores usando métodos públicos.
 - Métodos para generar mensajes al usuario en cada clase.
-- Método `main` en una clase de prueba para:
+- Vamos a utilizar tests unitarios para validar el correcto funcionamiento de las clases.
     - Crear y validar un cliente.
     - Crear y validar un vehículo.
     - Deshabilitar un cliente y validar.

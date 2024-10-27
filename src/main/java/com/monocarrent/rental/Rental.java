@@ -1,6 +1,6 @@
-package com.monocarrent.Rent;
+package com.monocarrent.rental;
 
-public class Rent
+public class Rental
 {
     public void doRent()
     {
