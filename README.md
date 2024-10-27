@@ -11,8 +11,8 @@ EL código fuente se encuentra en la carpeta `src/main/java/com/mono_car_rent` y
 ## Comandos para compilar y ejecutar
 
 ```bash
-mvn clean install
-mvn exec:java -Dexec.mainClass="com.mono_car_rent.Main"
+mvn clean install # Compilar
+mvn exec:java -Dexec.mainClass="com.mono_car_rent.Main" # Ejecutar
 ```
 
 ### Vehículo (Vehicle)
@@ -60,8 +60,8 @@ Una devolución se caracteriza por:
 ## Requerimientos Adicionales
 
 - Validaciones de atributos en los mutadores usando métodos públicos.
-- Métodos para generar mensajes al usuario en cada clase.
-- Clase `Main` con el método `main` para probar el sistema.
+- Métodos para generar mensajes al usuario en cada clase `toString`.
+- Clase `Main` con el método `main` para probar el sistema, mostrando un caso de uso completo exitoso y luego solicitando al usuario que ingrese los datos para probar cada funcionalidad.
     - Crear y validar un cliente.
     - Crear y validar un vehículo.
     - Deshabilitar un cliente y validar.

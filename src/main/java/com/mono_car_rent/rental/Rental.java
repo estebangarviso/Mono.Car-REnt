@@ -9,9 +9,10 @@ import java.util.Date;
 import com.mono_car_rent.common.Service;
 import com.mono_car_rent.common.exception.general.BadRequestException;
 import com.mono_car_rent.customer.Customer;
+import com.mono_car_rent.rental.use_case.ValidateRentalDaysUseCase;
 import com.mono_car_rent.vehicle.Vehicle;
 
-public class Rental extends Service {
+public class Rental extends Service implements ValidateRentalDaysUseCase {
     private Vehicle vehicle;
     private Customer customer;
     private Date rentalDate;
@@ -67,7 +68,7 @@ public class Rental extends Service {
     }
 
     public void setRentalDays(int rentalDays) {
-        if (!validateRentalDays(rentalDays)) {
+        if (!isValidRentalDays(rentalDays)) {
             throw BadRequestException.invalidRentalDays();
         }
         this.rentalHours = rentalDays * 24;
@@ -116,7 +117,7 @@ public class Rental extends Service {
                 "ticketId=" + getId() +
                 ", vehicle=" + vehicle.toString() +
                 ", customer=" + customer.toString() +
-                ", rentalDate=" + rentalDate +
+                ", rentalDate=" + rentalDate.toString() +
                 ", rentalDays=" + getRentalDays() +
                 ", rentalTotalAmount=" + getRentalTotalAmount() +
                 '}';
@@ -155,7 +156,7 @@ public class Rental extends Service {
     /**
      * Validates the rental days.
      */
-    public static boolean validateRentalDays(int rentalDays) {
+    public boolean isValidRentalDays(int rentalDays) {
         return rentalDays > 1 && rentalDays < 10;
     }
     //#endregion

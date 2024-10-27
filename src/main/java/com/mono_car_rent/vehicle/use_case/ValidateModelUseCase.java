@@ -1,5 +1,8 @@
 package com.mono_car_rent.vehicle.use_case;
 
 public interface ValidateModelUseCase {
-    public boolean validateModel(String modelId);
+    /**
+     * Validates the model of a vehicle.
+     */
+    public boolean isValidModel(String modelId);
 }

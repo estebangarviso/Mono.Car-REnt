@@ -23,7 +23,7 @@ public class Vehicle extends Service implements ValidateLicensePlateUseCase, Val
     }
 
     public void setLicensePlate(String licensePlate) {
-        if (!validateLicensePlate(licensePlate)) {
+        if (!isValidLicensePlate(licensePlate)) {
             throw BadRequestException.invalidLicensePlate();
         }
         this.licensePlate = licensePlate;
@@ -34,7 +34,7 @@ public class Vehicle extends Service implements ValidateLicensePlateUseCase, Val
     }
 
     public void setBrand(String brand) {
-        if (!validateBrand(brand)) {
+        if (!isValidBrand(brand)) {
             throw BadRequestException.invalidBrand();
         }
         this.brand = brand;
@@ -45,7 +45,7 @@ public class Vehicle extends Service implements ValidateLicensePlateUseCase, Val
     }
 
     public void setModel(String model) {
-        if (!validateModel(model)) {
+        if (!isValidModel(model)) {
             throw BadRequestException.invalidModel();
         }
         this.model = model;
@@ -56,7 +56,7 @@ public class Vehicle extends Service implements ValidateLicensePlateUseCase, Val
     }
 
     public void setManufactureYear(int manufactureYear) {
-        if (!validateManufactureYear(manufactureYear)) {
+        if (!isValidManufactureYear(manufactureYear)) {
             throw BadRequestException.invalidManufactureYear();
         }
         this.manufactureYear = manufactureYear;
@@ -85,31 +85,19 @@ public class Vehicle extends Service implements ValidateLicensePlateUseCase, Val
     //#endregion
 
     //#region Validation
-    /**
-     * Validates the license plate of a vehicle.
-     */
-    public boolean validateLicensePlate(String licensePlate) {
+    public boolean isValidLicensePlate(String licensePlate) {
         return licensePlate.matches("^[A-Z]{4}[0-9]{2}-[0-9]$");
     }
 
-    /**
-     * Validates the brand of a vehicle.
-     */
-    public boolean validateBrand(String brand) {
-        return brand.matches("^[A-Z]+$");
+    public boolean isValidBrand(String brand) {
+        return brand.matches("^[A-Z0-9]+$");
     }
 
-    /**
-     * Validates the model of a vehicle.
-     */
-    public boolean validateModel(String model) {
-        return model.matches("^[A-Z]+$");
+    public boolean isValidModel(String model) {
+        return model.matches("^[A-Z0-9]+$");
     }
 
-    /**
-     * Validates the manufacture year of a vehicle.
-     */
-    public boolean validateManufactureYear(int manufactureYear) {
+    public boolean isValidManufactureYear(int manufactureYear) {
         var currentYear = Year.now().getValue();
         return manufactureYear >= 2000 && manufactureYear <= currentYear;
     }

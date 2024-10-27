@@ -31,5 +31,4 @@ public class RentalRepository implements RepositoryInterface<Rental> {
     public static int nextId() {
         return rentals.size() + INITIAL_ID;
     }
-    
 }

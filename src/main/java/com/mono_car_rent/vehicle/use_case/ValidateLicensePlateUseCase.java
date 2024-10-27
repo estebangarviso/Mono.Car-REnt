@@ -1,5 +1,8 @@
 package com.mono_car_rent.vehicle.use_case;
 
 public interface ValidateLicensePlateUseCase {
-    public boolean validateLicensePlate(String licensePlate);
+    /**
+     * Validates the license plate of a vehicle.
+     */
+    public boolean isValidLicensePlate(String licensePlate);
 }

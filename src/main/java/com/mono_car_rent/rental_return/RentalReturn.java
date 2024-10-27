@@ -5,8 +5,9 @@ import java.util.Date;
 import com.mono_car_rent.common.Service;
 import com.mono_car_rent.common.exception.general.BadRequestException;
 import com.mono_car_rent.rental.Rental;
+import com.mono_car_rent.rental_return.use_case.ValidateReturnDateUseCase;
 
-public class RentalReturn extends Service {
+public class RentalReturn extends Service implements ValidateReturnDateUseCase {
     private Rental rental;
     private Date returnDate;
 
@@ -28,7 +29,7 @@ public class RentalReturn extends Service {
     }
 
     public void setReturnDate(Date returnDate) {
-        if (!validateReturnDate(returnDate)) {
+        if (!isValidReturnDate(returnDate)) {
             throw BadRequestException.invalidReturnDate();
         }
         this.returnDate = returnDate;
@@ -40,16 +41,13 @@ public class RentalReturn extends Service {
     public String toString() {
         return "RentalReturn{" +
                 "rental=" + rental.toString() +
-                ", returnDate=" + returnDate +
+                ", returnDate=" + returnDate.toString() +
                 '}';
     }
     //#endregion
 
     //#region Validation
-    /**
-     * Validate the return date. Must be after the rental date.
-     */
-    public boolean validateReturnDate(Date returnDate) {
+    public boolean isValidReturnDate(Date returnDate) {
         return returnDate.after(rental.getRentalDate());
     }
 }

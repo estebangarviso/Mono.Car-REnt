@@ -1,5 +1,8 @@
 package com.mono_car_rent.vehicle.use_case;
 
 public interface ValidateBrandUseCase {
-    public boolean validateBrand(String brand);
+    /**
+     * Validates the brand of a vehicle.
+     */
+    public boolean isValidBrand(String brand);
 }

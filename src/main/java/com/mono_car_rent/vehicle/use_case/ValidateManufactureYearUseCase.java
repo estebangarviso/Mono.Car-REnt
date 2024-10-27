@@ -1,5 +1,8 @@
 package com.mono_car_rent.vehicle.use_case;
 
 public interface ValidateManufactureYearUseCase {
-    public boolean validateManufactureYear(int manufactureYear);
+    /**
+     * Validates the manufacture year of a vehicle.
+     */
+    public boolean isValidManufactureYear(int manufactureYear);
 }
