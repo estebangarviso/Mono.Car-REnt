@@ -1,26 +1,31 @@
-package com.monocarrent.vehicle;
+package com.mono_car_rent.vehicle;
 
-public class VehicleModel {
-    private String license_plate;
+import com.mono_car_rent.common.Model;
+
+
+
+public class VehicleModel extends Model{
+    private String licensePlate;
     private String brand;
     private String model;
-    private int manufacture_year;
+    private int manufactureYear;
     private VehicleConditionStatus condition;
 
-    public VehicleModel(String license_plate, String brand, String model, int manufacture_year, VehicleConditionStatus condition) {
-        this.license_plate = license_plate;
+    public VehicleModel(String licensePlate, String brand, String model, int manufactureYear, VehicleConditionStatus condition) {
+        super(VehicleRepository.nextId());
+        this.licensePlate = licensePlate;
         this.brand = brand;
         this.model = model;
-        this.manufacture_year = manufacture_year;
+        this.manufactureYear = manufactureYear;
         this.condition = condition;
     }
 
     public String getLicensePlate() {
-        return license_plate;
+        return licensePlate;
     }
 
-    public void setLicensePlate(String license_plate) {
-        this.license_plate = license_plate;
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
     }
 
     public String getBrand() {
@@ -40,11 +45,11 @@ public class VehicleModel {
     }
 
     public int getManufactureYear() {
-        return manufacture_year;
+        return manufactureYear;
     }
 
-    public void setManufactureYear(int manufacture_year) {
-        this.manufacture_year = manufacture_year;
+    public void setManufactureYear(int manufactureYear) {
+        this.manufactureYear = manufactureYear;
     }
 
     public VehicleConditionStatus getCondition() {
@@ -58,10 +63,10 @@ public class VehicleModel {
     @Override
     public String toString() {
         return "VehicleModel{" +
-                "license_plate='" + license_plate + '\'' +
+                "licensePlate='" + licensePlate + '\'' +
                 ", brand='" + brand + '\'' +
                 ", model='" + model + '\'' +
-                ", manufacture_year=" + manufacture_year +
+                ", manufactureYear=" + manufactureYear +
                 ", condition=" + condition.getCodeStatus() +
                 '}';
     }

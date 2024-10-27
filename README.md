@@ -100,5 +100,5 @@ public class Main {
 
 ```bash
 mvn clean install
-mvn exec:java -Dexec.mainClass="com.monocarrent.App"
+mvn exec:java -Dexec.mainClass="com.mono_car_rent.App"
 ```

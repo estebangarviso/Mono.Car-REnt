@@ -1,4 +1,4 @@
-package com.monocarrent.common.exception.base;
+package com.mono_car_rent.common.exception.base;
 
 public class AppException extends RuntimeException {
     private final AppExceptionCode code;

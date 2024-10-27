@@ -1,4 +1,4 @@
-package com.monocarrent.vehicle;
+package com.mono_car_rent.vehicle;
 
 public enum VehicleConditionStatus {
     DISPONIBLE('D', "Disponible"),

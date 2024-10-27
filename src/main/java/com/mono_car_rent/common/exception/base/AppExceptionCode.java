@@ -1,4 +1,4 @@
-package com.monocarrent.common.exception.base;
+package com.mono_car_rent.common.exception.base;
 
 public enum AppExceptionCode {
 

@@ -1,7 +1,7 @@
-package com.monocarrent.common.exception.general;
+package com.mono_car_rent.common.exception.general;
 
-import com.monocarrent.common.exception.base.AppException;
-import com.monocarrent.common.exception.base.AppExceptionCode;
+import com.mono_car_rent.common.exception.base.AppException;
+import com.mono_car_rent.common.exception.base.AppExceptionCode;
 
 public class BadRequestException extends AppException {
 
