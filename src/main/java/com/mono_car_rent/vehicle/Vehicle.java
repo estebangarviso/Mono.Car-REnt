@@ -86,7 +86,7 @@ public class Vehicle extends Service implements ValidateLicensePlateUseCase, Val
 
     //#region Validation
     public boolean isValidLicensePlate(String licensePlate) {
-        return licensePlate.matches("^[A-Z]{4}[0-9]{2}-[0-9]$");
+        return licensePlate.matches("^[A-Z]{4}[0-9]{2}");
     }
 
     public boolean isValidBrand(String brand) {

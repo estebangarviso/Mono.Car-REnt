@@ -92,7 +92,7 @@ public class Main {
         // - Crear y validar un vehículo.
         logger.info("Creating a vehicle...");
         Vehicle vehicle = new Vehicle();
-        vehicle.setLicensePlate("CZSL60-6");
+        vehicle.setLicensePlate("CZSL60");
         vehicle.setBrand("TOYOTA");
         vehicle.setModel("COROLLA");
         vehicle.setManufactureYear(2020);
