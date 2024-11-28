@@ -1,14 +1,13 @@
 package com.mono_car_rent;
 
-import java.text.DateFormat;
+import com.mono_car_rent.customer.Customer;
+import com.mono_car_rent.rental.Rental;
+import com.mono_car_rent.rental_return.RentalReturn;
+import com.mono_car_rent.vehicle.Vehicle;
+import com.mono_car_rent.vehicle.VehicleConditionStatus;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Logger;
-import com.mono_car_rent.customer.Customer;
-import com.mono_car_rent.vehicle.Vehicle;
-import com.mono_car_rent.vehicle.VehicleConditionStatus;
-import com.mono_car_rent.rental.Rental;
-import com.mono_car_rent.rental_return.RentalReturn;
 public class Main {
     private static final Logger logger = Logger.getLogger(Main.class.getName());
     public static void main(String[] args) {
@@ -42,7 +41,7 @@ public class Main {
         // - Deshabilitar un cliente y validar.
         logger.info("Disabling a customer...");
         var disableCustomer = System.console().readLine("Do you want to disable the customer? (Y/n): ");
-        if (disableCustomer.toUpperCase().equals("Y")) {
+        if (disableCustomer.equalsIgnoreCase("Y")) {
             customer.setValidity(false);
             logger.info("Customer disabled!");
         }
@@ -92,7 +91,7 @@ public class Main {
         // - Crear y validar un vehículo.
         logger.info("Creating a vehicle...");
         Vehicle vehicle = new Vehicle();
-        vehicle.setLicensePlate("CZSL60-6");
+        vehicle.setLicensePlate("CZSL60");
         vehicle.setBrand("TOYOTA");
         vehicle.setModel("COROLLA");
         vehicle.setManufactureYear(2020);
