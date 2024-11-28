@@ -1,8 +1,8 @@
-package com.mono_car_rent.rental_return;
+package com.mono_car_rent.modules.rental_return;
 
+import com.mono_car_rent.common.RepositoryInterface;
 import java.util.HashMap;
 import java.util.Map;
-import com.mono_car_rent.common.RepositoryInterface;
 
 public class RentalReturnRepository implements RepositoryInterface<RentalReturn> {
     private static Map<Integer, RentalReturn> rentalReturns = new HashMap<>();

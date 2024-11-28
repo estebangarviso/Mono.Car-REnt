@@ -1,4 +1,4 @@
-package com.mono_car_rent.rental.use_case;
+package com.mono_car_rent.modules.rental.use_case;
 
 public interface ValidateRentalDaysUseCase {
     /**

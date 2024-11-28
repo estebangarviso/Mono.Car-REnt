@@ -1,8 +1,8 @@
-package com.mono_car_rent.rental;
+package com.mono_car_rent.modules.rental;
 
+import com.mono_car_rent.common.RepositoryInterface;
 import java.util.HashMap;
 import java.util.Map;
-import com.mono_car_rent.common.RepositoryInterface;
 
 public class RentalRepository implements RepositoryInterface<Rental> {
     private static final int INITIAL_ID = 23453;

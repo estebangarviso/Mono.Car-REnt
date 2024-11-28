@@ -1,8 +1,8 @@
-package com.mono_car_rent.customer;
+package com.mono_car_rent.modules.customer;
 
 import com.mono_car_rent.common.Service;
 import com.mono_car_rent.common.exception.general.BadRequestException;
-import com.mono_car_rent.customer.use_case.ValidateIdentityCardUseCase;
+import com.mono_car_rent.modules.customer.use_case.ValidateIdentityCardUseCase;
 
 public class Customer extends Service implements ValidateIdentityCardUseCase {
     private String identityCard;
@@ -55,6 +55,7 @@ public class Customer extends Service implements ValidateIdentityCardUseCase {
 
     //#region Validation
 
+    @Override
     public boolean isValidIdentityCard(String identityCard) {
         return identityCard.matches("\\d{8}-[\\dk]");
     }

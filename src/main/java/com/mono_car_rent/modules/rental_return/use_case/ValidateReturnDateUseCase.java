@@ -1,4 +1,4 @@
-package com.mono_car_rent.rental_return.use_case;
+package com.mono_car_rent.modules.rental_return.use_case;
 
 import java.util.Date;
 

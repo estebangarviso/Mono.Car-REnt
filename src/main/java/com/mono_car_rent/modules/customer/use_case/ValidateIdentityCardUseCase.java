@@ -1,4 +1,4 @@
-package com.mono_car_rent.customer.use_case;
+package com.mono_car_rent.modules.customer.use_case;
 
 public interface ValidateIdentityCardUseCase {
     /**

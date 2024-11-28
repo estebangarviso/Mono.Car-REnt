@@ -1,8 +1,8 @@
-package com.mono_car_rent.vehicle;
+package com.mono_car_rent.modules.vehicle;
 
+import com.mono_car_rent.common.RepositoryInterface;
 import java.util.HashMap;
 import java.util.Map;
-import com.mono_car_rent.common.RepositoryInterface;
 
 public class VehicleRepository implements RepositoryInterface<Vehicle> {
     private static Map<Integer, Vehicle> vehicles = new HashMap<>();

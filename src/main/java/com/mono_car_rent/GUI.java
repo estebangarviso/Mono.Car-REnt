@@ -4,17 +4,17 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class SwingControlDemo {
+public class GUI {
    private JFrame mainFrame;
    private JLabel headerLabel;
    private JLabel statusLabel;
    private JPanel controlPanel;
 
-   public SwingControlDemo(){
+   public GUI(){
       prepareGUI();
    }
    public static void main(String[] args){
-      SwingControlDemo swingControlDemo = new SwingControlDemo();  
+      GUI swingControlDemo = new GUI();  
       swingControlDemo.showEventDemo();       
    }
    private void prepareGUI(){

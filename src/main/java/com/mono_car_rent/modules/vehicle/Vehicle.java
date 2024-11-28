@@ -1,9 +1,14 @@
-package com.mono_car_rent.vehicle;
+package com.mono_car_rent.modules.vehicle;
 
 import com.mono_car_rent.common.Service;
 import com.mono_car_rent.common.exception.general.BadRequestException;
-import com.mono_car_rent.vehicle.use_case.*;
+import com.mono_car_rent.modules.vehicle.use_case.ValidateBrandUseCase;
+import com.mono_car_rent.modules.vehicle.use_case.ValidateLicensePlateUseCase;
+import com.mono_car_rent.modules.vehicle.use_case.ValidateManufactureYearUseCase;
+import com.mono_car_rent.modules.vehicle.use_case.ValidateModelUseCase;
 import java.time.Year;
+
+
 
 
 public class Vehicle extends Service implements ValidateLicensePlateUseCase, ValidateBrandUseCase, ValidateModelUseCase, ValidateManufactureYearUseCase {

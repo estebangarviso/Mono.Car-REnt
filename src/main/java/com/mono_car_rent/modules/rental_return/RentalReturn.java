@@ -1,11 +1,12 @@
-package com.mono_car_rent.rental_return;
-
-import java.util.Date;
+package com.mono_car_rent.modules.rental_return;
 
 import com.mono_car_rent.common.Service;
 import com.mono_car_rent.common.exception.general.BadRequestException;
-import com.mono_car_rent.rental.Rental;
-import com.mono_car_rent.rental_return.use_case.ValidateReturnDateUseCase;
+import com.mono_car_rent.modules.rental.Rental;
+import com.mono_car_rent.modules.rental_return.use_case.ValidateReturnDateUseCase;
+import java.util.Date;
+
+
 
 public class RentalReturn extends Service implements ValidateReturnDateUseCase {
     private Rental rental;
@@ -47,6 +48,7 @@ public class RentalReturn extends Service implements ValidateReturnDateUseCase {
     //#endregion
 
     //#region Validation
+    @Override
     public boolean isValidReturnDate(Date returnDate) {
         return returnDate.after(rental.getRentalDate());
     }

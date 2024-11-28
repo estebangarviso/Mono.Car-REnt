@@ -1,16 +1,16 @@
-package com.mono_car_rent.rental;
-
-import java.util.Locale;
-import java.text.NumberFormat;
-
-import java.util.Calendar;
-import java.util.Date;
+package com.mono_car_rent.modules.rental;
 
 import com.mono_car_rent.common.Service;
 import com.mono_car_rent.common.exception.general.BadRequestException;
-import com.mono_car_rent.customer.Customer;
-import com.mono_car_rent.rental.use_case.ValidateRentalDaysUseCase;
-import com.mono_car_rent.vehicle.Vehicle;
+import com.mono_car_rent.modules.customer.Customer;
+import com.mono_car_rent.modules.rental.use_case.ValidateRentalDaysUseCase;
+import com.mono_car_rent.modules.vehicle.Vehicle;
+import java.text.NumberFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
+
 
 public class Rental extends Service implements ValidateRentalDaysUseCase {
     private Vehicle vehicle;
@@ -156,6 +156,7 @@ public class Rental extends Service implements ValidateRentalDaysUseCase {
     /**
      * Validates the rental days.
      */
+    @Override
     public boolean isValidRentalDays(int rentalDays) {
         return rentalDays > 1 && rentalDays < 10;
     }
