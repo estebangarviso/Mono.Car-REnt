@@ -4,6 +4,7 @@ import com.mono_car_rent.common.Page;
 import com.mono_car_rent.common.Pageable;
 import com.mono_car_rent.modules.customer.dto.CustomerSaveDTO;
 import com.mono_car_rent.modules.customer.dto.CustomerUpdateDTO;
+import java.util.Optional;
 
 public class CustomerController {
     private final CustomerService customerService = new CustomerService();
@@ -16,7 +17,7 @@ public class CustomerController {
         return customerService.get(identityCard);
     }
 
-    public Page<Customer> paginate(Pageable pageable, String filter) throws Throwable {
+    public Page<Customer> paginate(Pageable pageable, Optional<String> filter) throws Throwable {
         return customerService.paginate(pageable, filter);
     }
 
