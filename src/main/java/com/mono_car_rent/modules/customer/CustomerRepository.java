@@ -12,6 +12,7 @@ import com.mono_car_rent.modules.customer.dto.CustomerUpdateDTO;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class CustomerRepository extends AbstractRepository<Customer> {
@@ -99,10 +100,25 @@ public class CustomerRepository extends AbstractRepository<Customer> {
      *
      * @param pageable the page information
      */
-    public RepositoryResponse<Page<Customer>> paginate(Pageable pageable) {
+    public RepositoryResponse<Page<Customer>> paginate(Pageable pageable, Optional<String> filter) {
         int page = pageable.page();
         int size = pageable.size();
-        int totalItems = this.count();
+        List<Customer> allCustomers = this.getAll();
+        
+        // Apply filter
+        List<Customer> activeCustomersList = new ArrayList<>();
+        if (filter.isEmpty()) {
+            activeCustomersList = allCustomers;
+        } else {
+            String filterValue = filter.get();
+            for (Customer customer : allCustomers) {
+                if (customer.getIdentityCard().contains(filterValue) || customer.getName().contains(filterValue)) {
+                    activeCustomersList.add(customer);
+                }
+            }
+        }
+
+        int totalItems = activeCustomersList.size();
         int totalPages = (int) Math.ceil((double) totalItems / size);
         if (page < 1 || page > totalPages) {
             return RepositoryResponse.<Page<Customer>>builder()
@@ -110,7 +126,10 @@ public class CustomerRepository extends AbstractRepository<Customer> {
                     .error(BadRequestException.invalidPage(page, totalPages))
                     .build();
         }
-        List<Customer> items = super.getPage(page, size);
+        List<Customer> items = activeCustomersList.stream()
+                .skip((page - 1) * size)
+                .limit(size)
+                .toList();
 
         Page<Customer> customerPage = new Page<Customer>();
         customerPage.setCurrentPage(page);

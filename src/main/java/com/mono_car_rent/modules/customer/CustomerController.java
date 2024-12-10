@@ -16,8 +16,8 @@ public class CustomerController {
         return customerService.get(identityCard);
     }
 
-    public Page<Customer> paginate(Pageable pageable) throws Throwable {
-        return customerService.paginate(pageable);
+    public Page<Customer> paginate(Pageable pageable, String filter) throws Throwable {
+        return customerService.paginate(pageable, filter);
     }
 
     public Customer update(String identityCard, CustomerUpdateDTO customerUpdateDTO) throws Throwable {
