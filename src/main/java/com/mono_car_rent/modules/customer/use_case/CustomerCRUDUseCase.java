@@ -5,6 +5,8 @@ import com.mono_car_rent.common.Pageable;
 import com.mono_car_rent.modules.customer.Customer;
 import com.mono_car_rent.modules.customer.dto.CustomerSaveDTO;
 import com.mono_car_rent.modules.customer.dto.CustomerUpdateDTO;
+import java.util.Optional;
+
 
 public interface CustomerCRUDUseCase {
     /**
@@ -24,9 +26,10 @@ public interface CustomerCRUDUseCase {
     /**
      * Paginate customers.
      * @param pageable the pagination data
+     * @param filter the filter to apply
      * @return the paginated customers
      */
-    public Page<Customer> paginate(Pageable pageable) throws Throwable;
+    public Page<Customer> paginate(Pageable pageable, Optional<String> filter) throws Throwable;
 
     /**
      * Update a customer by its identity card.
