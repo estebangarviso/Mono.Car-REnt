@@ -1,34 +1,137 @@
 package com.mono_car_rent.modules.customer;
 
-import com.mono_car_rent.common.RepositoryInterface;
-import java.util.HashMap;
-import java.util.Map;
+import com.google.gson.reflect.TypeToken;
+import com.mono_car_rent.common.AbstractRepository;
+import com.mono_car_rent.common.Page;
+import com.mono_car_rent.common.Pageable;
+import com.mono_car_rent.common.RepositoryResponse;
+import com.mono_car_rent.common.exception.general.BadRequestException;
+import com.mono_car_rent.common.exception.general.NotFoundException;
+import com.mono_car_rent.modules.customer.dto.CustomerSaveDTO;
+import com.mono_car_rent.modules.customer.dto.CustomerUpdateDTO;
 
-public class CustomerRepository implements RepositoryInterface<Customer> {
-    private static Map<Integer, Customer> customers = new HashMap<>();
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
-    @Override
-    public void save(Customer entity) {
-        customers.put(entity.getId(), entity);
+public class CustomerRepository extends AbstractRepository<Customer> {
+    private CustomerRepository() {
+        super("customers.json", new TypeToken<ArrayList<Customer>>() {});
     }
 
-    @Override
-    public void delete(int id) {
-        customers.remove(id);
+    /**
+     * Saves a customer.
+     *
+     * @param customerSaveDTO the customer to save
+     */
+    public RepositoryResponse<Customer> save(CustomerSaveDTO customerSaveDTO) {
+        Customer newCustomer = Customer.builder()
+                .identityCard(customerSaveDTO.identityCard())
+                .name(customerSaveDTO.name())
+                .build();
+        return super.save(newCustomer);
     }
 
-    @Override
-    public void update(Customer entity) {
-        customers.put(entity.getId(), entity);
-    }
-    
-    @Override
-    public Customer findById(int id) {
-        return customers.get(id);
+    /**
+     * Finds a customer by identity card.
+     *
+     * @param identityCard the identity card to search
+     * @return the customer found or null
+     */
+    public RepositoryResponse<Customer> findByIdentityCard(String identityCard) {
+        for (Customer customer : this.getAll()) {
+            if (customer.getIdentityCard().equals(identityCard)) {
+                return RepositoryResponse.<Customer>builder()
+                        .success(true)
+                        .value(customer)
+                        .build();
+            }
+        }
+        return RepositoryResponse.<Customer>builder()
+                .success(false)
+                .error(NotFoundException.customerNotFound(identityCard))
+                .build();
     }
 
-    public static int nextId() {
-        return customers.size() + 1;
+    /**
+     * Updates a customer.
+     *
+     * @param customerUpdateDTO the customer to update
+     */
+    public RepositoryResponse<Customer> update(String identityCard, CustomerUpdateDTO customerUpdateDTO) {
+        RepositoryResponse<Customer> customerResponse = findByIdentityCard(identityCard);
+        if (!customerResponse.isSuccess()) {
+            return customerResponse;
+        }
+        Customer customer = customerResponse.getValue();
+        if (customer == null) {
+            return RepositoryResponse.<Customer>builder()
+                    .success(false)
+                    .error(NotFoundException.customerNotFound(identityCard))
+                    .build();
+        }
+        customer.setName(customerUpdateDTO.name());
+        return super.update(customerResponse.getIndex(), customer);
     }
-    
+
+    /**
+     * Deletes a customer.
+     *
+     * @param identityCard the identity card of the customer to delete
+     */
+    public RepositoryResponse<String> delete(String identityCard) {
+        RepositoryResponse<Customer> customerResponse = findByIdentityCard(identityCard);
+        if (!customerResponse.isSuccess()) {
+            return RepositoryResponse.<String>builder()
+                    .success(false)
+                    .error(NotFoundException.customerNotFound(identityCard))
+                    .build();
+        }
+        super.delete(customerResponse.getIndex());
+        return RepositoryResponse.<String>builder()
+                .success(true)
+                .value(identityCard)
+                .build();
+    }
+
+    /**
+     * Gets a page of customers.
+     *
+     * @param pageable the page information
+     */
+    public RepositoryResponse<Page<Customer>> paginate(Pageable pageable) {
+        int page = pageable.page();
+        int size = pageable.size();
+        int totalItems = this.count();
+        int totalPages = (int) Math.ceil((double) totalItems / size);
+        if (page < 1 || page > totalPages) {
+            return RepositoryResponse.<Page<Customer>>builder()
+                    .success(false)
+                    .error(BadRequestException.invalidPage(page, totalPages))
+                    .build();
+        }
+        List<Customer> items = super.getPage(page, size);
+
+        Page<Customer> customerPage = new Page<Customer>();
+        customerPage.setCurrentPage(page);
+        customerPage.setPageSize(size);
+        customerPage.setItems(items);
+        customerPage.setTotalItems(totalItems);
+        customerPage.setTotalPages(totalPages);
+
+        return RepositoryResponse.<Page<Customer>>builder()
+                .success(true)
+                .value(customerPage)
+                .build();
+    }
+
+    //#region Singleton
+    private static final AtomicReference<CustomerRepository> instance = new AtomicReference<>();
+    public static CustomerRepository getInstance() {
+        if (instance.get() == null) {
+            instance.set(new CustomerRepository());
+        }
+        return instance.get();
+    }
+    //#endregion
 }
