@@ -1,62 +1,41 @@
 package com.mono_car_rent.modules.customer;
 
-import com.mono_car_rent.common.Service;
 import com.mono_car_rent.common.exception.general.BadRequestException;
-import com.mono_car_rent.modules.customer.use_case.ValidateIdentityCardUseCase;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
-public class Customer extends Service implements ValidateIdentityCardUseCase {
+@Getter
+@Builder
+public class Customer {
     private String identityCard;
-    private String name;
+    private @Setter String name;
     private Boolean validity = true;
-    
-    public Customer() {
-        super(CustomerRepository.nextId());
-    }
 
-    //#region Getters and Setters
-    public String getIdentityCard() {
-        return identityCard;
-    }
-
-    public void setIdentityCard(String identityCard) {
-        if (!isValidIdentityCard(identityCard)) {
-            throw BadRequestException.invalidIdentityCard();
-        }
-        this.identityCard = identityCard;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Boolean getValidity() {
-        return validity;
-    }
-
-    public void setValidity(Boolean validity) {
-        this.validity = validity;
-    }
-    //#endregion
-
-    //#region Methods
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "identityCard='" + identityCard + '\'' +
-                ", name='" + name + '\'' +
-                ", validity=" + validity +
-                '}';
-    }
-    //#endregion
-
-    //#region Validation
-
-    @Override
-    public boolean isValidIdentityCard(String identityCard) {
+    /**
+     * Validate the identity card format.
+     *
+     * @param identityCard the identity card to validate
+     */
+    private boolean isValidIdentityCard(String identityCard) {
         return identityCard.matches("\\d{8}-[\\dk]");
+    }
+
+    /**
+     * Builder for the Customer class.
+     */
+    public class CustomerBuilder {
+        public Customer build() {
+            if (identityCard == null) {
+                throw BadRequestException.invalidIdentityCard();
+            }
+            if (name == null) {
+                throw BadRequestException.isRequired("Name");
+            }
+            if (!isValidIdentityCard(identityCard)) {
+                throw BadRequestException.invalidIdentityCard();
+            }
+            return new Customer(identityCard, name, validity);
+        }
     }
 }
