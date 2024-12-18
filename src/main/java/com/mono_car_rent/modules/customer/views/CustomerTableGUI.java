@@ -1,4 +1,4 @@
 package com.mono_car_rent.modules.customer.views;
 
-public class CustomerEdition {
+public class CustomerTableGUI {
 }

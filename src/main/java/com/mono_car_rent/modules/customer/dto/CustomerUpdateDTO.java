@@ -4,6 +4,10 @@ public record CustomerUpdateDTO(
         /**
          * Customer's name.
          */
-        String name
+        String name,
+        /**
+         * Customer's validity.
+         */
+        Boolean validity
 ) {
 }

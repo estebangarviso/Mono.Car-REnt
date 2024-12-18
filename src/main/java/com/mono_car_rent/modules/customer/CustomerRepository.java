@@ -60,19 +60,21 @@ public class CustomerRepository extends AbstractRepository<Customer> {
      * @param customerUpdateDTO the customer to update
      */
     public RepositoryResponse<Customer> update(String identityCard, CustomerUpdateDTO customerUpdateDTO) {
-        RepositoryResponse<Customer> customerResponse = findByIdentityCard(identityCard);
-        if (!customerResponse.isSuccess()) {
-            return customerResponse;
+        RepositoryResponse<Customer> repositoryResponse = findByIdentityCard(identityCard);
+        if (!repositoryResponse.isSuccess()) {
+            return repositoryResponse;
         }
-        Customer customer = customerResponse.getValue();
-        if (customer == null) {
+        Customer found = repositoryResponse.getValue();
+        if (found == null) {
             return RepositoryResponse.<Customer>builder()
                     .success(false)
                     .error(NotFoundException.customerNotFound(identityCard))
                     .build();
         }
-        customer.setName(customerUpdateDTO.name());
-        return super.update(customerResponse.getIndex(), customer);
+        found.setName(customerUpdateDTO.name());
+        found.setValidity(customerUpdateDTO.validity());
+        found.toBuilder().build();
+        return super.update(repositoryResponse.getIndex(), found);
     }
 
     /**

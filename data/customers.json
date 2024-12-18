@@ -1,0 +1,52 @@
+[
+  {
+    "identityCard": "10715641-0",
+    "name": "John Doe",
+    "validity": true
+  },
+  {
+    "identityCard": "21706058-3",
+    "name": "Jane Smith",
+    "validity": true
+  },
+  {
+    "identityCard": "20181764-1",
+    "name": "Alice Johnson",
+    "validity": true
+  },
+  {
+    "identityCard": "24007284-k",
+    "name": "Bob Brown",
+    "validity": true
+  },
+  {
+    "identityCard": "23836011-0",
+    "name": "Charlie Davis",
+    "validity": true
+  },
+  {
+    "identityCard": "23630991-6",
+    "name": "Diana Evans",
+    "validity": true
+  },
+  {
+    "identityCard": "18740520-3",
+    "name": "Eve Foster",
+    "validity": true
+  },
+  {
+    "identityCard": "14606460-4",
+    "name": "Frank Green",
+    "validity": true
+  },
+  {
+    "identityCard": "9786858-1",
+    "name": "Grace Harris",
+    "validity": true
+  },
+  {
+    "identityCard": "13043502-5",
+    "name": "Hank Irving",
+    "validity": true
+  }
+]
