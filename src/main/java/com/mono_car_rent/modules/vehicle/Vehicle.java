@@ -1,114 +1,150 @@
 package com.mono_car_rent.modules.vehicle;
 
-import com.mono_car_rent.common.Service;
 import com.mono_car_rent.common.exception.general.BadRequestException;
-import com.mono_car_rent.modules.vehicle.use_case.ValidateBrandUseCase;
-import com.mono_car_rent.modules.vehicle.use_case.ValidateLicensePlateUseCase;
-import com.mono_car_rent.modules.vehicle.use_case.ValidateManufactureYearUseCase;
-import com.mono_car_rent.modules.vehicle.use_case.ValidateModelUseCase;
+
 import java.time.Year;
 
-
-
-
-public class Vehicle extends Service implements ValidateLicensePlateUseCase, ValidateBrandUseCase, ValidateModelUseCase, ValidateManufactureYearUseCase {
-    private String licensePlate;
+public class Vehicle {
+    private String plate;
     private String brand;
     private String model;
-    private int manufactureYear;
+    private int year;
     private VehicleConditionStatus condition = VehicleConditionStatus.DISPONIBLE;
 
-    public Vehicle() {
-        super(VehicleRepository.nextId());
+    private Vehicle(String plate, String brand, String model, int year, VehicleConditionStatus condition) {
+        this.plate = plate;
+        this.brand = brand;
+        this.model = model;
+        this.year = year;
+        this.condition = condition;
     }
 
-    //#region Getters and Setters
-    public String getLicensePlate() {
-        return licensePlate;
+    public static VehicleBuilder builder() {
+        return new VehicleBuilder();
     }
 
-    public void setLicensePlate(String licensePlate) {
-        if (!isValidLicensePlate(licensePlate)) {
-            throw BadRequestException.invalidLicensePlate();
-        }
-        this.licensePlate = licensePlate;
+    public String getPlate() {
+        return this.plate;
     }
 
     public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        if (!isValidBrand(brand)) {
-            throw BadRequestException.invalidBrand();
-        }
-        this.brand = brand;
+        return this.brand;
     }
 
     public String getModel() {
-        return model;
+        return this.model;
     }
 
-    public void setModel(String model) {
-        if (!isValidModel(model)) {
-            throw BadRequestException.invalidModel();
-        }
-        this.model = model;
-    }
-
-    public int getManufactureYear() {
-        return manufactureYear;
-    }
-
-    public void setManufactureYear(int manufactureYear) {
-        if (!isValidManufactureYear(manufactureYear)) {
-            throw BadRequestException.invalidManufactureYear();
-        }
-        this.manufactureYear = manufactureYear;
+    public int getYear() {
+        return this.year;
     }
 
     public VehicleConditionStatus getCondition() {
-        return condition;
+        return this.condition;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
     }
 
     public void setCondition(VehicleConditionStatus condition) {
         this.condition = condition;
     }
-    //#endregion
 
-    //#region Methods
-    @Override
-    public String toString() {
-        return "Vehicle{" +
-                "licensePlate='" + licensePlate + '\'' +
-                ", brand='" + brand + '\'' +
-                ", model='" + model + '\'' +
-                ", manufactureYear=" + manufactureYear +
-                ", condition=" + condition.getCodeStatus() +
-                '}';
-    }
-    //#endregion
-
-    //#region Validation
-    @Override
-    public boolean isValidLicensePlate(String licensePlate) {
-        return licensePlate.matches("^[A-Z]{4}[0-9]{2}");
+    public VehicleBuilder toBuilder() {
+        return new VehicleBuilder().plate(this.plate).brand(this.brand).model(this.model).year(this.year).condition(this.condition);
     }
 
-    @Override
-    public boolean isValidBrand(String brand) {
-        return brand.matches("^[A-Z0-9]+$");
-    }
+    public static class VehicleBuilder {
+        private String plate;
+        private String brand;
+        private String model;
+        private int year;
+        private VehicleConditionStatus condition;
 
-    @Override
-    public boolean isValidModel(String model) {
-        return model.matches("^[A-Z0-9]+$");
-    }
+        VehicleBuilder() {
+        }
 
-    @Override
-    public boolean isValidManufactureYear(int manufactureYear) {
-        var currentYear = Year.now().getValue();
-        return manufactureYear >= 2000 && manufactureYear <= currentYear;
+        public boolean isValidLicensePlate(String licensePlate) {
+            return licensePlate.matches("^[A-Z]{4}[0-9]{2}");
+        }
+
+        public boolean isValidBrand(String brand) {
+            return brand.matches("^[A-Z0-9]+$");
+        }
+
+        public boolean isValidModel(String model) {
+            return model.matches("^[A-Z0-9]+$");
+        }
+
+        public boolean isValidManufactureYear(int manufactureYear) {
+            var currentYear = Year.now().getValue();
+            return manufactureYear >= 2000 && manufactureYear <= currentYear;
+        }
+
+        public Vehicle build() {
+            if (plate == null) {
+                throw BadRequestException.isRequired("Plate");
+            }
+            if (brand == null) {
+                throw BadRequestException.isRequired("Brand");
+            }
+            if (model == null) {
+                throw BadRequestException.isRequired("Model");
+            }
+            if (year <= 0) {
+                throw BadRequestException.isRequired("Year");
+            }
+            if (!isValidLicensePlate(plate)) {
+                throw BadRequestException.invalidLicensePlate();
+            }
+            if (!isValidBrand(brand)) {
+                throw BadRequestException.invalidBrand();
+            }
+            if (!isValidModel(model)) {
+                throw BadRequestException.invalidModel();
+            }
+            if (!isValidManufactureYear(year)) {
+                throw BadRequestException.invalidManufactureYear();
+            }
+            return new Vehicle(plate, brand, model, year, condition);
+        }
+
+        public VehicleBuilder plate(String plate) {
+            this.plate = plate;
+            return this;
+        }
+
+        public VehicleBuilder brand(String brand) {
+            this.brand = brand;
+            return this;
+        }
+
+        public VehicleBuilder model(String model) {
+            this.model = model;
+            return this;
+        }
+
+        public VehicleBuilder year(int year) {
+            this.year = year;
+            return this;
+        }
+
+        public VehicleBuilder condition(VehicleConditionStatus condition) {
+            this.condition = condition;
+            return this;
+        }
+
+        public String toString() {
+            return "Vehicle.VehicleBuilder(plate=" + this.plate + ", brand=" + this.brand + ", model=" + this.model + ", year=" + this.year + ", condition=" + this.condition + ")";
+        }
     }
-    //#endregion
 }
