@@ -7,7 +7,7 @@ import com.mono_car_rent.common.exception.general.BadRequestException;
 import com.mono_car_rent.modules.customer.dto.CustomerSaveDTO;
 import com.mono_car_rent.modules.customer.dto.CustomerUpdateDTO;
 import com.mono_car_rent.modules.customer.use_case.CustomerCRUDUseCase;
-import com.mono_car_rent.modules.rental.RentalRepository;
+import com.mono_car_rent.modules.rental.rental.RentalRepository;
 import java.util.Optional;
 
 
