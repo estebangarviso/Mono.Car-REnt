@@ -14,6 +14,7 @@ public enum AppExceptionCode {
     INVALID_MODEL(1003, 400, "error.invalid.model"),
     INVALID_MANUFACTURER_YEAR(1004, 400, "error.invalid.manufacturer.year"),
     VEHICLE_NOT_FOUND(1005, 404, "error.vehicle.not.found"),
+    INVALID_RETURN_DATE(1006, 400, "error.invalid.return.date"), INVALID_PRICE_PER_DAY(5003, 400, "error.invalid.price.per.day"),
     //#endregion
     //#region Customer
     INVALID_IDENTITY_CARD(2001, 400, "error.invalid.identity.card"),
@@ -24,10 +25,9 @@ public enum AppExceptionCode {
     //#region Rental
     INVALID_RENTAL_DAYS(4001, 400, "error.invalid.rental.days"),
     RENTAL_NOT_FOUND(4002, 404, "error.rental.not.found"),
-    INVALID_RENTAL_DATE(4003, 400, "error.invalid.rental.date"),
+    INVALID_RENTAL_DATE(4003, 400, "error.invalid.rental.date");
     //#endregion
     //#region Rental Return
-    INVALID_RETURN_DATE(5002, 400, "error.invalid.return.date");
     //#endregion
 
     AppExceptionCode(Integer codeApp, Integer statusCode, String messageKey) {

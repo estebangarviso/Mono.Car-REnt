@@ -52,6 +52,9 @@ public class BadRequestException extends AppException {
     }
     //#endregion
     //#region Rental
+    public static BadRequestException invalidPricePerDay() {
+        return new BadRequestException(AppExceptionCode.INVALID_PRICE_PER_DAY, new Throwable("Invalid price per day, must be greater than 0"));
+    }
     public static BadRequestException invalidRentalDays() {
         return new BadRequestException(AppExceptionCode.INVALID_RENTAL_DAYS, new Throwable("Invalid rental days, must be greater than 1 and less than 10"));
     }
