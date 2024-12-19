@@ -1,0 +1,72 @@
+[
+  {
+    "plate": "ABC1234",
+    "brand": "Toyota",
+    "model": "Corolla",
+    "year": 2015,
+    "condition": "DISPONIBLE"
+  },
+  {
+    "plate": "XYZ5678",
+    "brand": "Honda",
+    "model": "Civic",
+    "year": 2018,
+    "condition": "DISPONIBLE"
+  },
+  {
+    "plate": "LMN9101",
+    "brand": "Ford",
+    "model": "Focus",
+    "year": 2017,
+    "condition": "DISPONIBLE"
+  },
+  {
+    "plate": "GHI2345",
+    "brand": "Chevrolet",
+    "model": "Malibu",
+    "year": 2016,
+    "condition": "DISPONIBLE"
+  },
+  {
+    "plate": "JKL6789",
+    "brand": "Nissan",
+    "model": "Altima",
+    "year": 2019,
+    "condition": "DISPONIBLE"
+  },
+  {
+    "plate": "QRS3456",
+    "brand": "Hyundai",
+    "model": "Elantra",
+    "year": 2020,
+    "condition": "DISPONIBLE"
+  },
+  {
+    "plate": "TUV7890",
+    "brand": "Kia",
+    "model": "Optima",
+    "year": 2014,
+    "condition": "DISPONIBLE"
+  },
+  {
+    "plate": "WXY1234",
+    "brand": "Volkswagen",
+    "model": "Jetta",
+    "year": 2013,
+    "condition": "DISPONIBLE"
+  },
+  {
+    "plate": "BCD5678",
+    "brand": "Subaru",
+    "model": "Impreza",
+    "year": 2012,
+    "condition": "DISPONIBLE"
+  },
+  {
+    "plate": "EFG9101",
+    "brand": "Mazda",
+    "model": "3",
+    "year": 2011,
+    "condition": "DISPONIBLE"
+  }
+]

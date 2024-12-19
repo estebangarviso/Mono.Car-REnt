@@ -1,6 +1,7 @@
 [
-  {
-    "key": "theme",
-    "value": "dark"
-  }
+    {
+        "id": 1,
+        "theme": "DARK",
+        "isSideMenuOpen": false
+    }
 ]
