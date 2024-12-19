@@ -152,6 +152,7 @@ public class SideMenuPanel {
             th.start();
 
             x = 0;
+            isOpen = false;
         } else if (x == 0) {
             Thread th = new Thread() {
                 @Override
@@ -190,6 +191,7 @@ public class SideMenuPanel {
             };
             th.start();
             x = maxWidth;
+            isOpen = true;
         }
 
     }
