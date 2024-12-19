@@ -1,23 +1,37 @@
 package com.mono_car_rent.common.config;
 
 public class Config {
-    private String key;
-    private String value;
+    private  int id;
+    private Theme theme;
+    private boolean isSideMenuOpen;
 
-    public Config(String key, String value) {
-        this.key = key;
-        this.value = value;
+    public Config() {}
+
+    public int getId() {
+        return id;
     }
 
-    public String getKey() {
-        return this.key;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getValue() {
-        return this.value;
+    public Theme getTheme() {
+        return theme;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setTheme(Theme theme) {
+        this.theme = theme;
+    }
+
+    public boolean isSideMenuOpen() {
+        return isSideMenuOpen;
+    }
+
+    public void setSideMenuOpen(boolean isSideMenuOpen) {
+        this.isSideMenuOpen = isSideMenuOpen;
+    }
+
+    public enum Theme {
+        LIGHT, DARK
     }
 }

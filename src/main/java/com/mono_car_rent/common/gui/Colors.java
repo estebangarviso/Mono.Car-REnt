@@ -1,11 +1,14 @@
 package com.mono_car_rent.common.gui;
 
 import java.awt.Color;
-import com.mono_car_rent.common.config.ConfigRepository;
+
+import com.mono_car_rent.common.config.Config;
+import com.mono_car_rent.common.config.ConfigService;
+import com.mono_car_rent.common.config.ConfigUpdateDTO;
 
 public class Colors {
-    private final static ConfigRepository configRepository = ConfigRepository.getInstance();
-    private static String currentTheme;
+    private final static ConfigService configService = ConfigService.getInstance();
+    private static Config.Theme currentTheme;
     // Main theme colors
     private static Color PRIMARY;
     private static Color PRIMARY_DARK;
@@ -25,8 +28,8 @@ public class Colors {
     private Colors() {}
 
     public static void init() {
-        currentTheme = configRepository.findByKey("theme").getValue().getValue();
-        if (currentTheme.equals("dark")) {
+        currentTheme = configService.getConfig().getTheme();
+        if (currentTheme.equals(Config.Theme.DARK)) {
             useDarkTheme();
         } else {
             useLightTheme();
@@ -51,7 +54,7 @@ public class Colors {
         TEXT_DISABLED = new Color(120, 120, 120);  // Muted Grey
 
         // Save the theme
-        if (!currentTheme.equals("dark")) configRepository.update("theme", "dark");
+        if (!currentTheme.equals(Config.Theme.DARK)) configService.update(new ConfigUpdateDTO().setTheme(Config.Theme.DARK));
     }
 
     public static void useLightTheme() {
@@ -71,7 +74,7 @@ public class Colors {
         TEXT_SECONDARY = new Color(66, 66, 66);   // Dark Grey
         TEXT_DISABLED = new Color(120, 120, 120); // Muted Grey
         // Save the theme
-        if (!currentTheme.equals("light")) configRepository.update("theme", "light");
+        if (!currentTheme.equals(Config.Theme.LIGHT)) configService.update(new ConfigUpdateDTO().setTheme(Config.Theme.LIGHT));
     }
     
     // Helper methods

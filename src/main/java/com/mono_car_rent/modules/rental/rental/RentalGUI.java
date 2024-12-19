@@ -1,86 +1,110 @@
 package com.mono_car_rent.modules.rental.rental;
 
+import com.mono_car_rent.Main;
+import com.mono_car_rent.common.Page;
+import com.mono_car_rent.common.Pageable;
+import com.mono_car_rent.common.gui.Colors;
+import com.mono_car_rent.common.gui.Fonts;
+import com.mono_car_rent.common.gui.NumericTextField;
+import com.mono_car_rent.common.libs.Logger;
+import com.mono_car_rent.modules.customer.Customer;
+import com.mono_car_rent.modules.customer.CustomerController;
+import com.mono_car_rent.modules.rental.RentalController;
+import com.mono_car_rent.modules.vehicle.Vehicle;
+import com.mono_car_rent.modules.vehicle.VehicleController;
 
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.util.*;
 import javax.swing.*;
-import java.awt.*;
 
 public class RentalGUI extends JFrame {
-    public RentalGUI() {
+    private static final org.apache.logging.log4j.Logger logger = new Logger().getLogger();
+    private final CustomerController customerController = new CustomerController();
+    private final VehicleController vehicleController = new VehicleController();
+    private final RentalController rentalController = new RentalController();
+    public RentalGUI(Main parentComponent) {
+        this.parentComponent = parentComponent;
         initComponents();
     }
 
     private void initComponents() {
+        int WIDTH = 1000;
         GridBagConstraints gridBagConstraints;
 
         mainPanel = new JPanel();
         titleRental = new JLabel();
-        rentalDate = new JLabel();
-        rentalDays = new JLabel();
-        pricePerDay = new JLabel();
-        amountToPay = new JLabel();
+        rentalDateLabel = new JLabel();
+        rentalDaysLabel = new JLabel();
+        pricePerDayLabel = new JLabel();
+        amountToPayLabel = new JLabel();
         titlePayments = new JLabel();
         titleValue = new JLabel();
         titlePaid = new JLabel();
         titleNumber = new JLabel();
-        labelNumberOfPayments = new JLabel();
+        numberOfPaymentsLabel = new JLabel();
         saveShowPayments = new JButton();
         newCustomerButton = new JButton();
         payFirstInstallmentButton = new JButton();
         customerSelection = new JComboBox<>();
         carSelection = new JComboBox<>();
-        dateValue = new JTextField();
-        daysValue = new JTextField();
-        priceValue = new JTextField();
-        amountValue = new JTextField();
-        numberOfPaymentsValue = new JTextField();
+        rentalDatePlaceholder = new JTextField();
+        rentalDaysField = new NumericTextField();
+        pricePerDayField = new JTextField();
+        amountPlaceholder = new JTextField();
+        numberOfPaymentsField = new JTextField();
         paymentsPanel = new JScrollPane();
         paymentsList = new JList<>();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        setMinimumSize(new Dimension(782, 424));
+        setMinimumSize(new Dimension(WIDTH, 424));
         getContentPane().setLayout(new GridBagLayout());
 
         mainPanel.setMaximumSize(new Dimension(2147483647, 2147483647));
-        mainPanel.setMinimumSize(new Dimension(782, 424));
-        mainPanel.setPreferredSize(new Dimension(782, 424));
+        mainPanel.setMinimumSize(new Dimension(WIDTH, 424));
+        mainPanel.setPreferredSize(new Dimension(WIDTH, 424));
 
-        titleRental.setFont(new Font("Segoe UI", 1, 18)); // NOI18N
+        titleRental.setFont(Fonts.getFontBoldSM());
         titleRental.setHorizontalAlignment(SwingConstants.CENTER);
         titleRental.setText("RENTAL WITH PAYMENTS");
         titleRental.setToolTipText("");
 
-        rentalDate.setText("Rental Date:");
+        rentalDateLabel.setText("Rental Date:");
 
-        rentalDays.setText("Days:");
+        rentalDaysLabel.setText("Days:");
 
-        pricePerDay.setText("Price per Day:");
+        pricePerDayLabel.setText("Price per Day:");
 
-        amountToPay.setText("AMOUNT TO PAY");
+        amountToPayLabel.setText("AMOUNT TO PAY");
 
-        titlePayments.setFont(new Font("Segoe UI", 1, 12)); // NOI18N
+        titlePayments.setFont(Fonts.getFontBoldSM());
         titlePayments.setHorizontalAlignment(SwingConstants.CENTER);
         titlePayments.setText("PAYMENTS TO MAKE");
         titlePayments.setToolTipText("");
 
-        titleValue.setFont(new Font("Segoe UI", 1, 12)); // NOI18N
+        titleValue.setFont(Fonts.getFontBoldSM());
         titleValue.setHorizontalAlignment(SwingConstants.CENTER);
         titleValue.setText("Value");
         titleValue.setToolTipText("");
 
-        titlePaid.setFont(new Font("Segoe UI", 1, 12)); // NOI18N
+        titlePaid.setFont(Fonts.getFontBoldSM());
         titlePaid.setHorizontalAlignment(SwingConstants.CENTER);
         titlePaid.setText("Paid?");
         titlePaid.setToolTipText("");
 
-        titleNumber.setFont(new Font("Segoe UI", 1, 12)); // NOI18N
+        titleNumber.setFont(Fonts.getFontBoldSM());
         titleNumber.setHorizontalAlignment(SwingConstants.CENTER);
         titleNumber.setText("Number");
         titleNumber.setToolTipText("");
 
-        labelNumberOfPayments.setText("Number of payments:");
+        numberOfPaymentsLabel.setText("Number of payments:");
 
-        saveShowPayments.setBackground(new Color(220, 220, 220));
+        saveShowPayments.setBackground(Colors.getPrimaryColor());
+        saveShowPayments.setForeground(Colors.getTextPrimaryColor());
         saveShowPayments.setText("Save rental and show payments >>");
         saveShowPayments.setAutoscrolls(true);
         saveShowPayments.addActionListener(new java.awt.event.ActionListener() {
@@ -106,7 +130,11 @@ public class RentalGUI extends JFrame {
         });
 
         customerSelection.setBackground(new Color(220, 220, 220));
-        customerSelection.setModel(new DefaultComboBoxModel<>(new String[] { "Select CUSTOMER", "Customer 1", "Customer 2", "Customer 3", " " }));
+        List<Customer> customers = getCustomers();
+        customerSelection.setModel(new DefaultComboBoxModel<>(new String[] { "Select a Customer" }));
+        for (Customer customer : customers) {
+            customerSelection.addItem(customer.getName());
+        }
         customerSelection.setMinimumSize(new Dimension(160, 22));
         customerSelection.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -115,21 +143,27 @@ public class RentalGUI extends JFrame {
         });
 
         carSelection.setBackground(new Color(220, 220, 220));
-        carSelection.setModel(new DefaultComboBoxModel<>(new String[] { "Select CAR", "Car 1", "Car 2", "Car 3", " " }));
+        List<Vehicle> vehicles = getVehicles();
+        carSelection.setModel(new DefaultComboBoxModel<>(new String[] { "Select a Vehicle" }));
+        for (Vehicle vehicle : vehicles) {
+            carSelection.addItem(vehicle.getPlate() + " - " + vehicle.getBrand() + " " + vehicle.getModel());
+        }
 
-        dateValue.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                dateValueActionPerformed(evt);
-            }
-        });
+        rentalDatePlaceholder.setEditable(false);
+        // Set the current date as the default value in dd/mm/yyyy format
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+        rentalDateValue = calendar.getTime();
+        String date = String.format("%1$td/%1$tm/%1$tY", rentalDateValue);
+        rentalDatePlaceholder.setText(date);
 
-        daysValue.addActionListener(new java.awt.event.ActionListener() {
+        rentalDaysField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 daysValueActionPerformed(evt);
             }
         });
+        rentalDaysField.setMinValue(1);
 
-        amountValue.setEditable(false);
+        amountPlaceholder.setEditable(false);
 
         paymentsPanel.setViewportView(paymentsList);
 
@@ -137,106 +171,97 @@ public class RentalGUI extends JFrame {
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(titleRental, GroupLayout.PREFERRED_SIZE, 782, GroupLayout.PREFERRED_SIZE)
             .addGroup(mainPanelLayout.createSequentialGroup()
-                .addGap(103, 103, 103)
-                .addComponent(customerSelection, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
-                .addGap(94, 94, 94)
-                .addComponent(carSelection, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE))
-            .addGroup(mainPanelLayout.createSequentialGroup()
-                .addGap(103, 103, 103)
-                .addComponent(newCustomerButton, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE))
-            .addGroup(mainPanelLayout.createSequentialGroup()
-                .addGap(523, 523, 523)
-                .addComponent(titlePayments, GroupLayout.PREFERRED_SIZE, 215, GroupLayout.PREFERRED_SIZE))
-            .addGroup(mainPanelLayout.createSequentialGroup()
-                .addGap(529, 529, 529)
-                .addComponent(titleNumber, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6)
-                .addComponent(titleValue, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6)
-                .addComponent(titlePaid, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE))
-            .addGroup(mainPanelLayout.createSequentialGroup()
-                .addGap(30, 30, 30)
                 .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(titleRental, GroupLayout.PREFERRED_SIZE, WIDTH, GroupLayout.PREFERRED_SIZE)
                     .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addComponent(rentalDate)
-                        .addGap(7, 7, 7)
-                        .addComponent(dateValue, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))
+                        .addGap(103, 103, 103)
+                        .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(newCustomerButton, GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE)
+                            .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addComponent(customerSelection, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)
+                                .addGap(94, 94, 94)
+                                .addComponent(carSelection, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE))))
                     .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(rentalDays)
+                        .addGap(30, 30, 30)
+                        .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                            .addComponent(rentalDateLabel)
+                            .addComponent(rentalDaysLabel)
+                            .addComponent(pricePerDayLabel)
+                            .addComponent(amountToPayLabel))
                         .addGap(15, 15, 15)
-                        .addComponent(daysValue, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE))
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addComponent(pricePerDay)
-                        .addGap(13, 13, 13)
-                        .addComponent(priceValue, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addComponent(amountToPay)
-                        .addGap(4, 4, 4)
-                        .addComponent(amountValue, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)))
-                .addGap(3, 3, 3)
-                .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(rentalDatePlaceholder, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(rentalDaysField, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pricePerDayField, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(amountPlaceholder, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE))
                         .addGap(50, 50, 50)
-                        .addComponent(labelNumberOfPayments)
-                        .addGap(5, 5, 5)
-                        .addComponent(numberOfPaymentsValue, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE))
-                    .addComponent(saveShowPayments))
-                .addGap(56, 56, 56)
-                .addComponent(paymentsPanel, GroupLayout.PREFERRED_SIZE, 201, GroupLayout.PREFERRED_SIZE))
-            .addGroup(mainPanelLayout.createSequentialGroup()
-                .addGap(564, 564, 564)
-                .addComponent(payFirstInstallmentButton))
+                        .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addComponent(numberOfPaymentsLabel)
+                                .addGap(5, 5, 5)
+                                .addComponent(numberOfPaymentsField, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE))
+                            .addComponent(saveShowPayments))
+                        .addGap(56, 56, 56)
+                        .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(paymentsPanel, GroupLayout.PREFERRED_SIZE, 201, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(titlePayments, GroupLayout.PREFERRED_SIZE, 215, GroupLayout.PREFERRED_SIZE)
+                            .addGroup(mainPanelLayout.createSequentialGroup()
+                                .addComponent(titleNumber, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+                                .addGap(6, 6, 6)
+                                .addComponent(titleValue, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+                                .addGap(6, 6, 6)
+                                .addComponent(titlePaid, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE))
+                            .addComponent(payFirstInstallmentButton)))))
         );
+
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addGap(33, 33, 33)
                 .addComponent(titleRental, GroupLayout.PREFERRED_SIZE, 37, GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
-                .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(customerSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                     .addComponent(carSelection, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                 .addGap(6, 6, 6)
                 .addComponent(newCustomerButton, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
-                .addGap(9, 9, 9)
-                .addComponent(titlePayments)
-                .addGap(6, 6, 6)
-                .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                    .addComponent(titleNumber)
-                    .addComponent(titleValue)
-                    .addComponent(titlePaid))
-                .addGap(5, 5, 5)
+                .addGap(20, 20, 20)
                 .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addComponent(rentalDate)
-                            .addComponent(dateValue, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addGap(8, 8, 8)
-                        .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addComponent(rentalDays)
-                            .addComponent(daysValue, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addComponent(pricePerDay)
-                            .addComponent(priceValue, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addComponent(amountToPay)
-                            .addComponent(amountValue, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                            .addComponent(rentalDateLabel)
+                            .addComponent(rentalDatePlaceholder, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                            .addComponent(rentalDaysLabel)
+                            .addComponent(rentalDaysField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                            .addComponent(pricePerDayLabel)
+                            .addComponent(pricePerDayField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                            .addComponent(amountToPayLabel)
+                            .addComponent(amountPlaceholder, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
                     .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                            .addComponent(labelNumberOfPayments)
-                            .addComponent(numberOfPaymentsValue, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addGap(28, 28, 28)
-                        .addComponent(saveShowPayments, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE))
+                        .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                            .addComponent(numberOfPaymentsLabel)
+                            .addComponent(numberOfPaymentsField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addComponent(saveShowPayments))
                     .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(paymentsPanel, GroupLayout.PREFERRED_SIZE, 122, GroupLayout.PREFERRED_SIZE)))
-                .addGap(3, 3, 3)
-                .addComponent(payFirstInstallmentButton, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE))
+                        .addComponent(titlePayments)
+                        .addGap(10, 10, 10)
+                        .addGroup(mainPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                            .addComponent(titleNumber)
+                            .addComponent(titleValue)
+                            .addComponent(titlePaid))
+                        .addGap(10, 10, 10)
+                        .addComponent(paymentsPanel, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(payFirstInstallmentButton)))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         gridBagConstraints = new GridBagConstraints();
@@ -247,6 +272,30 @@ public class RentalGUI extends JFrame {
         getContentPane().add(mainPanel, gridBagConstraints);
 
         pack();
+    }
+
+    private List<Customer> getCustomers() {
+        Pageable pageable = new Pageable(1, 99999);
+        Optional<String> filter = Optional.empty();
+        try {
+            Page<Customer> customersPage = customerController.paginate(pageable, filter);
+            return customersPage.getItems();
+        } catch (Throwable e) {
+            logger.error("Error while fetching customers", e);
+            return new ArrayList<>();
+        }
+    }
+
+    private List<Vehicle> getVehicles() {
+        Pageable pageable = new Pageable(1, 99999);
+        Optional<String> filter = Optional.empty();
+        try {
+            Page<Vehicle> vehiclesPage = vehicleController.paginate(pageable, filter);
+            return vehiclesPage.getItems();
+        } catch (Throwable e) {
+            logger.error("Error while fetching vehicles", e);
+            return new ArrayList<>();
+        }
     }
 
     public JPanel getMainPanel() {
@@ -284,21 +333,18 @@ public class RentalGUI extends JFrame {
         // TODO add your handling code here:
     }
 
-    private void dateValueActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
+    private final Main parentComponent;
     private JButton newCustomerButton;
     private JButton payFirstInstallmentButton;
-    private JLabel rentalDays;
-    private JLabel rentalDate;
+    private JLabel rentalDaysLabel;
+    private JLabel rentalDateLabel;
     private JButton saveShowPayments;
     private JList<String> paymentsList;
-    private JLabel labelNumberOfPayments;
-    private JLabel amountToPay;
+    private JLabel numberOfPaymentsLabel;
+    private JLabel amountToPayLabel;
     private JPanel mainPanel;
     private JScrollPane paymentsPanel;
-    private JLabel pricePerDay;
+    private JLabel pricePerDayLabel;
     private JComboBox<String> carSelection;
     private JComboBox<String> customerSelection;
     private JLabel titleRental;
@@ -306,9 +352,10 @@ public class RentalGUI extends JFrame {
     private JLabel titleNumber;
     private JLabel titlePaid;
     private JLabel titleValue;
-    private JTextField numberOfPaymentsValue;
-    private JTextField daysValue;
-    private JTextField dateValue;
-    private JTextField amountValue;
-    private JTextField priceValue;
+    private JTextField numberOfPaymentsField;
+    private NumericTextField rentalDaysField;
+    private JTextField rentalDatePlaceholder;
+    private  Date rentalDateValue;
+    private JTextField amountPlaceholder;
+    private JTextField pricePerDayField;
 }

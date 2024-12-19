@@ -15,12 +15,12 @@ public class ConfigRepository extends AbstractRepository<Config> {
     /**
      * Finds a config by key.
      *
-     * @param key the key to search
+     * @param id the id to search
      * @return the config found or null
      */
-    public RepositoryResponse<Config> findByKey(String key) {
+    protected RepositoryResponse<Config> findById(int id) {
         for (Config config : this.getAll()) {
-            if (config.getKey().equals(key)) {
+            if (config.getId() == id) {
                 return RepositoryResponse.<Config>builder()
                         .success(true)
                         .value(config)
@@ -35,11 +35,11 @@ public class ConfigRepository extends AbstractRepository<Config> {
     /**
      * Updates a config.
      *
-     * @param key the key to update
+     * @param id the id to update
      * @param value the value to update
      */
-    public RepositoryResponse<Config> update(String key, String value) {
-        RepositoryResponse<Config> found = this.findByKey(key);
+    public RepositoryResponse<Config> update(int id, ConfigUpdateDTO configUpdateDTO) {
+        RepositoryResponse<Config> found = this.findById(id);
 
         if (!found.isSuccess()) {
             return RepositoryResponse.<Config>builder()
@@ -48,7 +48,12 @@ public class ConfigRepository extends AbstractRepository<Config> {
         }
 
         Config config = found.getValue();
-        config.setValue(value);
+        if (configUpdateDTO.getTheme() != null) {
+            config.setTheme(configUpdateDTO.getTheme());
+        }
+        if (configUpdateDTO.getIsSideMenuOpen() != null) {
+            config.setSideMenuOpen(configUpdateDTO.getIsSideMenuOpen());
+        }
 
         return super.update(found.getIndex(), config);
     }

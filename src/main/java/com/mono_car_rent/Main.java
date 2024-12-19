@@ -7,17 +7,20 @@ import java.util.Objects;
 import javax.swing.*;
 
 import com.formdev.flatlaf.extras.FlatSVGIcon;
+import com.mono_car_rent.common.config.ConfigService;
+import com.mono_car_rent.common.config.ConfigUpdateDTO;
 import com.mono_car_rent.common.gui.Fonts;
 import com.mono_car_rent.common.gui.Colors;
 import com.mono_car_rent.common.gui.SideMenuPanel;
 import com.mono_car_rent.modules.rental.rental.RentalGUI;
 
 public class Main extends JFrame {
+    private  final static ConfigService configService = ConfigService.getInstance();
     private JPanel mainPanel;
-    private final SideMenuPanel sideMenuPanel;
+    private SideMenuPanel sideMenuPanel;
     private JPanel sidePanel;
     private JPanel contentPanel;
-    private JButton toggleDrawerButton;
+    private JButton menuToggler;
     private JLabel logoLabel;
     private JButton rentalsButton;
     private JLabel rentalsButtonLabel;
@@ -33,7 +36,6 @@ public class Main extends JFrame {
         Colors.init();
         // Initialize components
         initComponents();
-        sideMenuPanel = new SideMenuPanel(this);
         sideMenuPanel.setMain(contentPanel);
         sideMenuPanel.setSide(sidePanel);
         sideMenuPanel.setMinWidth(minSideMenuWidth);
@@ -46,14 +48,15 @@ public class Main extends JFrame {
     @SuppressWarnings("unchecked")
     private void initComponents() {
         mainPanel = new JPanel();
+        sideMenuPanel = new SideMenuPanel(this);
         logoLabel = new JLabel();
-        toggleDrawerButton = new JButton();
+        menuToggler = new JButton();
         rentalsButton = new JButton();
         customersButton = new JButton();
-        rentalsButtonLabel = new JLabel("Rentals");
-        customersButtonLabel = new JLabel("Customers");
+        rentalsButtonLabel = new JLabel();
+        customersButtonLabel = new JLabel();
         vehiclesButton = new JButton();
-        vehiclesButtonLabel = new JLabel("Vehicles");
+        vehiclesButtonLabel = new JLabel();
         sidePanel = new JPanel();
         contentPanel = new JPanel();
         // Setup main layout
@@ -78,7 +81,7 @@ public class Main extends JFrame {
         sidePanel.setLayout(sidePanelLayout);
         sidePanelLayout.setHorizontalGroup(
                 sidePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addComponent(toggleDrawerButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(menuToggler, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(logoLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(rentalsButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(customersButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -88,9 +91,9 @@ public class Main extends JFrame {
                 sidePanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(sidePanelLayout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(toggleDrawerButton, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(menuToggler, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(logoLabel, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(logoLabel, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(rentalsButton, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
@@ -98,18 +101,6 @@ public class Main extends JFrame {
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(vehiclesButton, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        // Content panel
-        contentPanel.setBackground(Colors.getBackgroundColor());
-        GroupLayout contentPanelLayout = new GroupLayout(contentPanel);
-        contentPanel.setLayout(contentPanelLayout);
-        contentPanelLayout.setHorizontalGroup(
-                contentPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGap(0, 0, Short.MAX_VALUE)
-        );
-        contentPanelLayout.setVerticalGroup(
-                contentPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGap(0, 0, Short.MAX_VALUE)
         );
         // Content pane
         GroupLayout mainPanelLayout = new GroupLayout(mainPanel);
@@ -144,21 +135,20 @@ public class Main extends JFrame {
         this.setupLogo();
 
         // Setup buttons
-       this.setupButtons();
+        this.setupButtons();
 
-        // Setup toggle drawer button
-        this.setupToggleDrawerButton();
+        // Setup menu toggle
+        this.setupMenuToggle();
 
-        // Initial content
-        contentPanel.add(new RentalGUI().getMainPanel());
+        // Setup content panel
+        this.navigateToRentals();
     }
 
     private void setupLogo() {
         URL url = this.getClass().getResource("/images/logo.png");
         ImageIcon icon = new ImageIcon(url);
         Image image = icon.getImage();
-        Image newimg = image.getScaledInstance(50, -1, Image.SCALE_SMOOTH);
-        logoLabel.setText("Car Rent");
+        Image newimg = image.getScaledInstance(50, GroupLayout.DEFAULT_SIZE, Image.SCALE_SMOOTH);
         logoLabel.setIcon(new ImageIcon(newimg));
         logoLabel.setVerticalTextPosition(SwingConstants.BOTTOM);
         logoLabel.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -167,16 +157,22 @@ public class Main extends JFrame {
         logoLabel.setMinimumSize(new Dimension(50, 50));
     }
 
-    private  void setupButtons() {
+    private void setupButtons() {
         this.setupMenuButton(rentalsButton);
         this.setupMenuButton(customersButton);
         this.setupMenuButton(vehiclesButton);
         rentalsButton.setIcon(this.buildSVGIcon("/icons/car-building.svg"));
+        rentalsButton.setText("Rentals");
+        rentalsButtonLabel.setForeground(Colors.getTextPrimaryColor());
+        rentalsButtonLabel.setText("Rentals");
         customersButton.setIcon(this.buildSVGIcon("/icons/users.svg"));
+        customersButton.setText("Customers");
+        customersButtonLabel.setForeground(Colors.getTextPrimaryColor());
+        customersButtonLabel.setText("Customers");
         vehiclesButton.setIcon(this.buildSVGIcon("/icons/car-garage.svg"));
-        rentalsButton.add(rentalsButtonLabel);
-        customersButton.add(customersButtonLabel);
-        vehiclesButton.add(vehiclesButtonLabel);
+        vehiclesButton.setText("Vehicles");
+        vehiclesButtonLabel.setForeground(Colors.getTextPrimaryColor());
+        vehiclesButtonLabel.setText("Vehicles");
     }
 
     private void setupMenuButton(JButton button) {
@@ -192,26 +188,22 @@ public class Main extends JFrame {
         button.setIconTextGap(20);
         button.setMargin(new Insets(2, 3, 2, 14));
         button.setMinimumSize(new Dimension(0, 35));
-        button.setPreferredSize(new Dimension(50, 574));
+        button.setPreferredSize(new Dimension(50, 35));
     }
 
-    private void setupToggleDrawerButton() {
-        toggleDrawerButton.setIcon(this.buildSVGIcon("/icons/bars.svg"));
-        toggleDrawerButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        toggleDrawerButton.setBorder(null);
-        toggleDrawerButton.setContentAreaFilled(false);
-        toggleDrawerButton.setFocusPainted(false);
-        toggleDrawerButton.setOpaque(true);
+    private void setupMenuToggle() {
+        menuToggler.setIcon(this.buildSVGIcon("/icons/bars.svg"));
+        this.setupMenuButton(menuToggler);
     }
 
     private FlatSVGIcon buildSVGIcon(String resourcePath) {
         URL url = Objects.requireNonNull(this.getClass().getResource(resourcePath));
         FlatSVGIcon svg = new FlatSVGIcon(url);
-        return svg.derive(24, 24);
+        return svg.derive(35, 35);
     }
 
     private void setupActions() {
-        toggleDrawerButton.addActionListener(e -> this.onToggleDrawer());
+        menuToggler.addActionListener(e -> this.onMenuToggle());
         rentalsButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 navigateToRentals();
@@ -227,34 +219,44 @@ public class Main extends JFrame {
                 navigateToVehicles();
             }
         });
+        boolean isSideMenuOpen = configService.getConfig().isSideMenuOpen();
+        if (isSideMenuOpen) {
+            sideMenuPanel.onSideMenu();
+        }
     }
 
-    private void onToggleDrawer() {
+    private void onMenuToggle() {
+        this.sideMenuPanel.onSideMenu();
         if (this.sideMenuPanel.getIsOpen()) {
-
+            configService.update(new ConfigUpdateDTO().setIsSideMenuOpen(true));
+        } else {
+            configService.update(new ConfigUpdateDTO().setIsSideMenuOpen(false));
         }
-        this.sideMenuPanel.onSideMenu()
     }
 
     private void navigateToCustomers() {
-        contentPanel.removeAll();
-//        contentPanel.add(new CustomerGUI().getMainPanel());
-        contentPanel.revalidate();
-        contentPanel.repaint();
+        //this.refreshContentPanelWith(new CustomerGUI().getMainPanel());
     }
 
     private void navigateToVehicles() {
-        contentPanel.removeAll();
-//        contentPanel.add(new VehicleGUI().getMainPanel());
-        contentPanel.revalidate();
-        contentPanel.repaint();
+        //this.refreshContentPanelWith(new VehicleGUI().getMainPanel());
     }
 
     private void navigateToRentals() {
-        contentPanel.removeAll();
-        contentPanel.add(new RentalGUI().getMainPanel());
-        contentPanel.revalidate();
-        contentPanel.repaint();
+        this.refreshContentPanelWith(new RentalGUI(this).getMainPanel());
+    }
+
+    private void refreshContentPanelWith(JPanel panel) {
+        GroupLayout layout = new GroupLayout(contentPanel);
+        contentPanel.setLayout(layout);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
     }
 
     public static void main(String[] args) {

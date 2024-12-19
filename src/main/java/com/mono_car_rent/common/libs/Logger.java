@@ -3,11 +3,14 @@ package com.mono_car_rent.common.libs;
 import org.apache.logging.log4j.LogManager;
 
 public class Logger {
-
+    private org.apache.logging.log4j.Logger logger;
     // Private constructor to hide the implicit public one
-    private Logger() {
+    public Logger() {
+        String parentClass = Thread.currentThread().getStackTrace()[2].getClassName();
+        logger = LogManager.getLogger(parentClass);
     }
-    public static org.apache.logging.log4j.Logger getLogger(Class<?> clazz) {
-        return LogManager.getLogger(clazz);
+
+    public org.apache.logging.log4j.Logger getLogger() {
+        return logger;
     }
 }
